@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>注册</title>
+    <script src="./js/jquery-3.3.1.min.js"></script>
+    <script>
+        $(function(){
+            $.get('user/findAllUser',
+            function (result) {
+                if(result.success) {
+                    $(result.data).each(function (index) {
+                        $('table').append('<tr>\n' +
+                            '            <td>'+this.id+'</td>\n' +
+                            '            <td>'+this.name+'</td>\n' +
+                            '            <td>'+this.password+'</td>\n' +
+                            '        </tr>');
+                    });
+                } else {
+                    alert("没有获取到数据");
+                }
+
+            });
+        });
+    </script>
+</head>
+<body>
+    <table>
+        <tr>
+            <td>ID</td>
+            <td>用户名</td>
+            <td>密码</td>
+        </tr>
+
+    </table>
+</body>
+</html>
