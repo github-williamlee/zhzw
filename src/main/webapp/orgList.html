@@ -1,0 +1,221 @@
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html"; charset="utf-8" />
+<title>下载中心</title>
+
+<link href="css/all.css" rel="stylesheet" type="text/css">
+    <link href="js/bstable/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="js/bstable/css/bootstrap-table.css" rel="stylesheet" type="text/css">
+    <style>
+        #table{
+            width: 100%;
+            text-align: center;
+        }
+        #table > thead{
+            background-color: #eeeeee;
+            height: 45px;
+            font-weight: bold;
+        }
+        .cb{
+            width: 35px;
+        }
+        #table > tbody td{
+            border: 1px solid #cccccc;
+            height: 35px;
+
+        }
+        #table > tbody > tr:hover {
+            background-color: #eeeeee;
+        }
+        .trColor{
+            background-color: #f5f5f5;
+        }
+        #table > tbody {
+            border-top:2px solid rgb(8, 141, 168);
+        }
+        #table > tfoot td{
+            align-items: center;
+        }
+    </style>
+
+</head>
+<body>
+
+<div class="div_find">
+
+    <p><label class="find_labela">类型：</label><select class="find_input">
+        <option>全部</option>
+        <option>政策法规</option>
+        <option>文档模板</option>
+        <option>经济报告 </option>
+        <option>统计报表 </option>
+        <option>其它</option>
+
+
+    </select><label class="find_labela">标题：</label>
+        <input type="text" class="find_input">
+        <label class="find_labela">发布日期：</label><input type="text" id="demo" class="find_input">
+    </p>
+
+  </div>
+    <p class="p_but">
+
+
+        <i class="down_i" ></i><a href="#" class="add_a">全部导出</a>
+
+   </p>
+<p>
+
+    <table id="table" >
+        <thead>
+            <tr>
+                <td class="cb"><input type="checkbox"></td>
+                <td>编号</td>
+                <td>名称</td>
+                <td>法人</td>
+                <td>电话</td>
+                <td>操作</td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="cb"><input type="checkbox"></td>
+                <td>1</td>
+                <td>1</td>
+                <td>1</td>
+                <td>1</td>
+                <td>1</td>
+            </tr>
+            <tr>
+                <td class="cb"><input type="checkbox"></td>
+                <td>2</td>
+                <td>2</td>
+                <td>2</td>
+                <td>2</td>
+                <td>2</td>
+            </tr>
+            <tr>
+                <td class="cb"><input type="checkbox"></td>
+                <td>2</td>
+                <td>2</td>
+                <td>2</td>
+                <td>2</td>
+                <td>2</td>
+            </tr>
+            <tr>
+                <td class="cb"><input type="checkbox"></td>
+                <td>2</td>
+                <td>2</td>
+                <td>2</td>
+                <td>2</td>
+                <td>2</td>
+            </tr>
+            <tr>
+                <td class="cb"><input type="checkbox"></td>
+                <td>2</td>
+                <td>2</td>
+                <td>2</td>
+                <td>2</td>
+                <td>2</td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="6">
+                    <ul class="pagination">
+                        <li><a href="#">&laquo;</a></li>
+                        <li><a href="#">1</a></li>
+                        <li><a href="#">2</a></li>
+                        <li><a href="#">3</a></li>
+                        <li><a href="#">4</a></li>
+                        <li><a href="#">5</a></li>
+                        <li><a href="#">&raquo;</a></li>
+                    </ul>
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+</p>
+
+<script src="js/jquery/jQuery-2.2.0.min.js"></script>
+<script src="js/bstable/js/bootstrap.min.js"></script>
+<script src="js/bstable/js/bootstrap-table.js"></script>
+<script src="js/bstable/js/bootstrap-table-zh-CN.min.js"></script>
+<script src="js/date/js/laydate.js"></script>
+<script>
+    !function(){
+        laydate.skin('danlan');//切换皮肤，请查看skins下面皮肤库
+        laydate({elem: '#demo'});
+        laydate({elem: '#demo1'});//绑定元素
+    }();
+</script>
+
+
+<script src="js/layer_v2.1/layer/layer.js"></script>
+<script>
+    function setTrBg() {
+        $('#table > tbody > tr:even').addClass("trColor");
+    }
+    function openlayer(id){
+        layer.open({
+            type: 2,
+            title: '添加信息',
+            shadeClose: true,
+            shade: 0.5,
+            skin: 'layui-layer-rim',
+//            maxmin: true,
+            closeBtn:1,
+            area: ['98%', '92%'],
+            shadeClose: true,
+            closeBtn: 1,
+            content: 'addNotice.html'
+            //iframe的url
+        });
+    }
+</script>
+<script>
+    $(function () {
+        $(".find_span").click(function () {
+            $("#open").show();
+            $(this).hide();
+            $(".find_span1").show();
+            $("#but_close02").hide();
+            $("#but_open").hide();
+
+        })
+        $(".find_span1").click(function () {
+            $("#open").hide();
+            $(this).hide();
+            $(".find_span").show();
+            $("#but_open").show();
+            $("#but_close02").show();
+
+        })
+        setTrBg();
+        $('#table > thead input').change(function () {
+            if($(this).prop("checked")) {
+                $('#table > tbody input').prop("checked", true);
+            } else {
+                $('#table > tbody input').prop("checked", false);
+            }
+        });
+        $('#table > tbody input').change(function () {
+            if($(this).prop("checked")) {
+                $('#table > thead input').prop("checked", true);
+            } else {
+               var trs = $('#table > tbody input');
+               for(var i = 0; i < trs.length; i++) {
+                   if($(trs[i]).prop("checked")){
+                       return;
+                   }
+               }
+                $('#table > thead input').prop("checked", false);
+            }
+        });
+    })
+</script>
+
+</body>
+</html>

@@ -3,7 +3,7 @@
 
 <head>
 <meta http-equiv="Content-Type" content="text/html"; charset="utf-8" />
-<title>采用稿目录</title>
+<title> 社情民意回复</title>
 
 <link href="css/all.css" rel="stylesheet" type="text/css">
     <link href="js/bstable/css/bootstrap.min.css" rel="stylesheet" type="text/css">
@@ -13,12 +13,12 @@
 <body>
 <div class="div_tab01">
     <div class="map_find1">
-        <p><label >委员名称：</label><input type="text"  class="map_input"/><label >委员证号：</label><input type="text"  class="map_input"/>
-    <label >考勤情况：</label><select class="map_input">
-            <option>迟到</option>
-            <option>早退</option>
-            <option>缺会</option>
-                <option>正常</option>
+        <p><label >编号：</label><input type="text"  class="map_input"/><label >回复标题：</label><input type="text"  class="map_input"/>
+    <label >回复部门：</label><select class="map_input">
+            <option>全部</option>
+            <option>区政协</option>
+            <option>市政协</option>
+                <option>全国政协</option>
 
         </select><input type="button" value="搜索一下" class="find_but" id="but_open">
             </div>
@@ -51,7 +51,7 @@
             method: "get",
             striped: true,
             singleSelect: false,
-            url: "json/register.json",
+            url: "json/reply.json",
             dataType: "json",
             pagination: true, //分页
             pageSize: 10,
@@ -74,40 +74,26 @@
                     valign: 'middle'
                 },
                 {
-                    title: '委员名称',
+                    title: '回复标题',
                     field: 'name',
                     align: 'center',
                     valign: 'middle'
                 },
                 {
-                    title: '委员证号',
-                    field: 'no',
+                    title: '对应社情民意',
+                    field: 'target',
+                    align: 'center'
+                },
+                {
+                    title: '回复单位/人',
+                    field: 'part',
                     align: 'center'
                 },
 
                 {
-                    title: '入场时间',
+                    title: '回复时间',
                     field: 'time',
                     align: 'center'
-                },
-                {
-                    title: '出场时间',
-                    field: 'time01',
-                    align: 'center'
-                },
-                {
-                    title: '考勤情况',
-                    field: 'type',
-                    align: 'center',
-                    formatter: function (cellval, row) {
-                        //var cellval=$("#station").val();
-                        if (cellval =='迟到'){
-                            return '<div  style="color:red">'+cellval+'</div>';
-                        } else  if (cellval =='缺会'){
-                            return '<div  style="color:#801953">'+cellval+'</div>';
-                        }else {
-                            return cellval;
-                        }}
                 },
 
 

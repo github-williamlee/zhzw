@@ -3,7 +3,7 @@
 
 <head>
 <meta http-equiv="Content-Type" content="text/html"; charset="utf-8" />
-<title>采用稿目录</title>
+<title>下载中心</title>
 
 <link href="css/all.css" rel="stylesheet" type="text/css">
     <link href="js/bstable/css/bootstrap.min.css" rel="stylesheet" type="text/css">
@@ -11,27 +11,35 @@
 
 </head>
 <body>
-<div class="div_tab01">
-    <div class="map_find1">
-        <p><label >委员名称：</label><input type="text"  class="map_input"/><label >委员证号：</label><input type="text"  class="map_input"/>
-    <label >考勤情况：</label><select class="map_input">
-            <option>迟到</option>
-            <option>早退</option>
-            <option>缺会</option>
-                <option>正常</option>
 
-        </select><input type="button" value="搜索一下" class="find_but" id="but_open">
-            </div>
+<div class="div_find">
+
+    <p><label class="find_labela">类型：</label><select class="find_input">
+        <option>全部</option>
+        <option>政策法规</option>
+        <option>文档模板</option>
+        <option>经济报告 </option>
+        <option>统计报表 </option>
+        <option>其它</option>
+
+
+    </select><label class="find_labela">标题：</label>
+        <input type="text" class="find_input">
+        <label class="find_labela">发布日期：</label><input type="text" id="demo" class="find_input">
+    </p>
+
+  </div>
     <p class="p_but">
 
-        <i class="down_i" ></i><a href="#" class="add_a">导出</a>
-        <i class="print_i" ></i><a href="#" class="add_a">打印</a>
+
+        <i class="down_i" ></i><a href="#" class="add_a">全部导出</a>
+
    </p>
 <p>
     <table data-url="json/data_alae_list.json" id="table" class="table_style" style="margin: 0 auto" >
     </table>
 </p>
-</div>
+
 <script src="js/jquery/jQuery-2.2.0.min.js"></script>
 <script src="js/bstable/js/bootstrap.min.js"></script>
 <script src="js/bstable/js/bootstrap-table.js"></script>
@@ -51,7 +59,7 @@
             method: "get",
             striped: true,
             singleSelect: false,
-            url: "json/register.json",
+            url: "json/download.json",
             dataType: "json",
             pagination: true, //分页
             pageSize: 10,
@@ -74,40 +82,27 @@
                     valign: 'middle'
                 },
                 {
-                    title: '委员名称',
-                    field: 'name',
+                    title: '标题',
+                    field: 'title',
                     align: 'center',
                     valign: 'middle'
                 },
                 {
-                    title: '委员证号',
-                    field: 'no',
-                    align: 'center'
+                    title: '类型',
+                    field: 'type',
+                    align: 'center',
+                    valign: 'middle'
                 },
 
                 {
-                    title: '入场时间',
-                    field: 'time',
+                    title: '提交人',
+                    field: 'person',
                     align: 'center'
                 },
                 {
-                    title: '出场时间',
-                    field: 'time01',
+                    title: '提交时间',
+                    field: 'date',
                     align: 'center'
-                },
-                {
-                    title: '考勤情况',
-                    field: 'type',
-                    align: 'center',
-                    formatter: function (cellval, row) {
-                        //var cellval=$("#station").val();
-                        if (cellval =='迟到'){
-                            return '<div  style="color:red">'+cellval+'</div>';
-                        } else  if (cellval =='缺会'){
-                            return '<div  style="color:#801953">'+cellval+'</div>';
-                        }else {
-                            return cellval;
-                        }}
                 },
 
 
@@ -117,7 +112,8 @@
                     field: 'opear',
                     align: 'center',
                     formatter: function (value, row) {
-                        var e = '<a  href="#" title="查看详情" onclick="handleEvent(\'' + row.id + '\')">查看详情</a> ';
+                        var e = '<a  href="#" title="下载" onclick="openlayer(\'' + row.id + '\')">下载</a> ';
+
 
 
                         return e ;
@@ -142,7 +138,7 @@
             area: ['98%', '92%'],
             shadeClose: true,
             closeBtn: 1,
-            content: 'lay01.html'
+            content: 'addNotice.html'
             //iframe的url
         });
     }
@@ -153,6 +149,7 @@
             $("#open").show();
             $(this).hide();
             $(".find_span1").show();
+            $("#but_close02").hide();
             $("#but_open").hide();
 
         })
@@ -161,6 +158,7 @@
             $(this).hide();
             $(".find_span").show();
             $("#but_open").show();
+            $("#but_close02").show();
 
         })
 
