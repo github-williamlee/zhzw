@@ -17,41 +17,41 @@
 
 <body style="background-color: #e6ecf5">
 <div class="book_con01">
-    <form id="form_demo" >   <p class="book_p">
+    <form >   <p class="book_p">
         <table class="book_table" border="1" cellpadding="10">
     <tr><td>
         <label class="td_label">组织机构编号（组织机构代码证）</label><i class="i_start"></i>
     </td>
-        <td><input type="text" class="book_input03" name ="name" minlength="2"  required /></td>
+        <td><input id="code" type="text" class="book_input03"  minlength="2"/></td>
 
     </tr>
     <tr><td>
         <label class="td_label">组织机构名称</label><i class="i_start"></i>
     </td>
-        <td><input type="text" class="book_input03" name ="name" minlength="2"  required /></td>
+        <td><input id="name" type="text" class="book_input03"  minlength="2" /></td>
 
     </tr>
         <tr><td>
             <label class="td_label">组织机构地址</label>
         </td>
-            <td><input type="text" class="book_input03" name ="name" minlength="2"  required /></td>
+            <td><input id="address" type="text" class="book_input03"  minlength="2" /></td>
 
         </tr>
         <tr><td>
             <label class="td_label">法人</label><i class="i_start"></i>
         </td>
-            <td><input type="text" class="book_input03" name ="name" minlength="2"  required /></td>
+            <td><input id="legal" type="text" class="book_input03"  minlength="2"/></td>
 
         </tr>
         <tr><td>
             <label class="td_label">联系电话</label><i class="i_start"></i>
         </td>
-            <td><input type="text" class="book_input03" name ="name" minlength="2"  required /></td>
+            <td><input id="phone" type="text" class="book_input03"  minlength="2"/></td>
 
         </tr>
 </table>
     </p>
-    <p class="book_foot"><input type="submit" value="添加组织机构"/><input type="button" value="重置"/></p></form>
+    <p class="book_foot"><input type="button" onclick="addOrg();" value="添加组织机构"/><input type="button" onclick="clearMsg();" value="重置"/></p></form>
 </div>
 <script  src="js/jquery/jQuery-2.2.0.min.js"></script>
 <script src="js/editor/js/froala_editor.min.js"></script>
@@ -66,6 +66,32 @@
 <script src="js/editor/js/plugins/video.min.js"></script>
 <script src="js/date/js/laydate.js"></script>
 <script>
+    function addOrg() {
+        var code = $("#code").val().trim();
+        var name = $("#name").val().trim();
+        var address = $("#address").val().trim();
+        var legal = $("#legal").val().trim();
+        var phone = $("#phone").val().trim();
+        if(code.length == 0 || name.length == 0 || legal.length == 0 || phone.length == 0) {
+            alert('星号必须填写');
+        } else {
+            $.ajax({
+                url:'org',
+                method: 'POST',
+                data:{code:code,name:name,address:address,legal:legal,phone:phone},
+                success:function (result) {
+                    if(result.success) {
+                        alert('添加成功');
+                    } else {
+                        alert(result.msg);
+                    }
+                }
+            });
+        }
+    }
+    function clearMsg() {
+        $('.book_table input').val('');
+    }
     $(function(){
         $('#editor').editable({inlineMode: false, alwaysBlank: true})
     });
