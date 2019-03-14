@@ -1,12 +1,18 @@
 package com.oracle.hrb.zhzw.web;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.oracle.hrb.zhzw.bean.Org;
 import com.oracle.hrb.zhzw.bean.Result;
 import com.oracle.hrb.zhzw.service.OrgService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
+import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
@@ -27,10 +33,27 @@ public class OrgController {
         }
         return r;
     }
+
     @RequestMapping(method = GET)
-    public Result findOrgList() {
+    public Result findAll(Integer pageNum, Integer pageSize) {
         Result r = new Result();
-        r.setData(orgService.findAll());
+        if(pageNum == null || pageNum < 1) {
+            pageNum = 1;
+        }
+        if(pageSize == null) {
+            pageSize = 10;
+        }
+        PageHelper.startPage(pageNum,pageSize);
+        List<Org> list = orgService.findAll();
+        PageInfo<Org> orgs = new PageInfo<>(list);
+        r.setData(orgs);
+        return r;
+    }
+    @RequestMapping(method = DELETE)
+    public Result deleteOrg(@RequestParam("id") String id) {
+        System.out.println(id);
+        Result r = new Result();
+        orgService.deleteOrg(id);
         return r;
     }
 
