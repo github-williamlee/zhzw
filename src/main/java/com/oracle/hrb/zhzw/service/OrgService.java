@@ -22,6 +22,9 @@ public class OrgService {
             orgDao.add(org);
             return true;
         }
+    }
 
+    public List<Org> findAll() {
+        return orgDao.findAll();
     }
 }
