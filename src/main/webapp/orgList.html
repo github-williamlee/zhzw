@@ -67,25 +67,17 @@
 
 <div class="div_find">
 
-    <p><label class="find_labela">类型：</label><select class="find_input">
-        <option>全部</option>
-        <option>政策法规</option>
-        <option>文档模板</option>
-        <option>经济报告</option>
-        <option>统计报表</option>
-        <option>其它</option>
-
-
-    </select><label class="find_labela">标题：</label>
+    <p>
+        <label class="find_labela">关键字：</label>
         <input type="text" class="find_input">
-        <label class="find_labela">发布日期：</label><input type="text" id="demo" class="find_input">
+        <button class="find_but">搜索一下</button>
     </p>
 
 </div>
 <p class="p_but">
 
 
-    <i class="down_i"></i><a href="#" class="add_a">全部导出</a>
+    <i class="down_i"></i><a href="/org/sheet" class="add_a">全部导出</a>
 
 </p>
 <p>
@@ -179,7 +171,7 @@
     }
     var pageNum = 1;
     var pages = 1;
-    var pageSize = 3;
+    var pageSize = 10;
     function loadOrg(pageNum,pageSize) {
         $.ajax({
             url:'org?pageNum='+pageNum+'&pageSize=' + pageSize,
