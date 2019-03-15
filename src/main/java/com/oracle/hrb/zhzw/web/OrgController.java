@@ -38,7 +38,8 @@ public class OrgController {
     }
 
     @RequestMapping(method = GET)
-    public Result findAll(Integer pageNum, Integer pageSize) {
+    public Result findAll(String keyword, Integer pageNum, Integer pageSize) {
+        System.out.println("keyword = " + keyword);
         Result r = new Result();
         if(pageNum == null || pageNum < 1) {
             pageNum = 1;
@@ -47,7 +48,10 @@ public class OrgController {
             pageSize = 10;
         }
         PageHelper.startPage(pageNum,pageSize);
-        List<Org> list = orgService.findAll();
+        if(keyword.length() == 0) {
+            keyword = null;
+        }
+        List<Org> list = orgService.findAll(keyword);
         PageInfo<Org> orgs = new PageInfo<>(list);
         r.setData(orgs);
         return r;
@@ -95,7 +99,7 @@ public class OrgController {
         head.createCell(3).setCellValue("法人");
         head.createCell(4).setCellValue("联系电话");
         // 添加数据
-        List<Org> orgs = orgService.findAll();
+        List<Org> orgs = orgService.findAll(null);
         for(int i = 0; i < orgs.size(); i++) {
             Org org = orgs.get(i);
             HSSFRow row = sheet.createRow(i + 2);

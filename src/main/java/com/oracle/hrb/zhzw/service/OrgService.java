@@ -23,8 +23,8 @@ public class OrgService {
             return true;
         }
     }
-    public List<Org> findAll() {
-        return orgDao.findAll();
+    public List<Org> findAll(String keyword) {
+        return orgDao.findAll(keyword);
     }
 
     public void deleteOrg(String id) {

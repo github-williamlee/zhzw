@@ -69,8 +69,8 @@
 
     <p>
         <label class="find_labela">关键字：</label>
-        <input type="text" class="find_input">
-        <button class="find_but">搜索一下</button>
+        <input type="text" class="find_input" id="keyword">
+        <button class="find_but" onclick="loadOrg();">搜索一下</button>
     </p>
 
 </div>
@@ -173,8 +173,20 @@
     var pages = 1;
     var pageSize = 10;
     function loadOrg(pageNum,pageSize) {
+        if(pageNum == undefined) {
+            pageNum = window.pageNum;
+        }
+        if(pageSize == undefined) {
+            pageSize = window.pageSize;
+        }
+        console.log("获取组织机构数据");
+        var keyword = $('#keyword').val().trim();
+        console.log("keyword:" + keyword);
+        var url = 'org?pageNum='+pageNum+'&pageSize=' + pageSize+'&keyword=' + keyword;
+        console.log('url:'+url);
+
         $.ajax({
-            url:'org?pageNum='+pageNum+'&pageSize=' + pageSize,
+            url:url,
             method:'GET',
             success:function (r) {
                 pageNum = r.data.pageNum;
@@ -188,7 +200,7 @@
                         '        <td>'+this.legal+'</td>\n' +
                         '        <td>'+this.phone+'</td>\n' +
                         '        <td class="last">\n' +
-                        '            <a>修改</a>&nbsp;&nbsp;\n' +
+                        '            <a onclick="updateOrg(this);">修改</a>&nbsp;&nbsp;\n' +
                         '            <a onclick="deleteOrg(this);">删除</a>\n' +
                         '        </td>\n' +
                         '    </tr>');
@@ -199,6 +211,12 @@
             }
         });
     };
+    function updateOrg(e) {
+        var org = $(e).parent().parent().data('org');
+        //alert(org.name);
+        localStorage.setItem("hello", "测试本地存储");
+        location.href = "updateOrg.html";
+    }
     $(function () {
         $(".find_span").click(function () {
             $("#open").show();

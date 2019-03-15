@@ -8,6 +8,6 @@ public interface OrgDao {
     void add(Org org);
     void delete(String id);
     void update(Org org);
-    List<Org> findAll();
+    List<Org> findAll(String keyword);
     List<Org> findByCodeOrName(Org org);
 }
