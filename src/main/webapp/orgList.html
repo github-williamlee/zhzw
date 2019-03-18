@@ -214,7 +214,8 @@
     function updateOrg(e) {
         var org = $(e).parent().parent().data('org');
         //alert(org.name);
-        localStorage.setItem("hello", "测试本地存储");
+        // 将js对象转换成JSON字符串存储
+        localStorage.setItem("org", JSON.stringify(org));
         location.href = "updateOrg.html";
     }
     $(function () {

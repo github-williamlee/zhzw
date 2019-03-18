@@ -1,8 +1,14 @@
 package com.oracle.hrb.zhzw.bean;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+
 public class Org {
     private String id;
+    @NotNull(message = "组织结构代码不能为空")
     private String code;
+    @NotNull(message = "组织结构不能为空")
+    @Min(value = 4, message = "长度不能小于4")
     private String name;
     private String address;
     private String legal;

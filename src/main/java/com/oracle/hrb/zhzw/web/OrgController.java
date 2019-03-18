@@ -9,11 +9,15 @@ import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.net.URLEncoder;
 import java.util.List;
 
@@ -63,6 +67,26 @@ public class OrgController {
         orgService.deleteOrg(id);
         return r;
     }
+    @PutMapping
+    public Result updateOrg(@Valid Org org, BindingResult bindingResult) throws Exception {
+        if(bindingResult.hasErrors()) {
+            // 输出错误信息
+            List<FieldError> allErrors = bindingResult.getFieldErrors();
+            for (FieldError objectError : allErrors) {
+                System.out.println(objectError.getDefaultMessage());
+            }
+        }
+
+        Result r = new Result();
+        System.out.println(org);
+        boolean flag = orgService.updateOrg(org);
+        if(flag == false) {
+            r.setSuccess(false);
+            r.setMsg("组织机构代码证或组织机构名称已存在");
+        }
+        return r;
+    }
+
     @RequestMapping(method = GET, value = "/sheet")
     public void dowloadSheet(HttpServletResponse response) throws Exception {
         HSSFWorkbook wb = new HSSFWorkbook();
@@ -114,6 +138,13 @@ public class OrgController {
         response.setHeader("Content-Disposition", "attachment;filename="+URLEncoder.encode("组织机构表.xls", "UTF-8"));
         wb.write(response.getOutputStream());
         wb.close();
+    }
+    @RequestMapping(value = "check", method = POST)
+    public Result checkCodeOrName(Org org) {
+        Result r = new Result();
+        boolean flag = orgService.checkCodeOrPasswrod(org);
+        r.setSuccess(flag);
+        return r;
     }
 
 }
