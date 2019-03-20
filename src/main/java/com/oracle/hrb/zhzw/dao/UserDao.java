@@ -9,5 +9,5 @@ public interface UserDao {
     void delete(String id);
     void update(User user);
     List<User> findAll(User user);
-    User findByName(String name);
+    List<User> findByName(String name);
 }

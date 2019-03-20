@@ -130,10 +130,12 @@
         console.log("验证组织机构代码证");
         var code = $('#code').val().trim();
         if (code.length == 0) {
-            $('#code').after('<lable style="position: absolute;left:700px;color:red;width: 300px;height:30px;text-align: center;line-height: 30px;">' +
-                '组织机构代码证不能为空' +
-                '</lable>');
-            $('#code').addClass("warn");
+            if (!$('#code').next().is('lable')) {
+                $('#code').after('<lable style="position: absolute;left:700px;color:red;width: 300px;height:30px;text-align: center;line-height: 30px;">' +
+                    '组织机构代码证不能为空' +
+                    '</lable>');
+                $('#code').addClass("warn");
+            }
             return false;
         } else {
             var f = false;
@@ -164,10 +166,12 @@
         console.log("验证组织机构名称");
         var name = $('#name').val();
         if (name.length == 0) {
-            $('#name').after('<lable style="position: absolute;left:700px;color:red;border-radius:5px;width: 300px;height:30px;text-align: center;line-height: 30px;">' +
-                '组织机构名称不能为空' +
-                '</lable>');
-            $('#name').addClass("warn")
+            if (!$('#name').next().is('lable')) {
+                $('#name').after('<lable style="position: absolute;left:700px;color:red;border-radius:5px;width: 300px;height:30px;text-align: center;line-height: 30px;">' +
+                    '组织机构名称不能为空' +
+                    '</lable>');
+                $('#name').addClass("warn")
+            }
             return false;
         } else {
             var f = false;

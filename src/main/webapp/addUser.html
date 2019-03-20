@@ -8,6 +8,8 @@
     <link href="css/all.css" rel="stylesheet" type="text/css">
     <link href="js/editor/css/font-awesome.min.css" rel="stylesheet" type="text/css">
     <link href="js/editor/css/froala_editor.min.css" rel="stylesheet" type="text/css">
+    <!-- 必须先引入jQuery在引入bootstrap -->
+    <script src="js/jquery/jQuery-2.2.0.min.js"></script>
 
     <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -20,6 +22,11 @@
         .book_table td {
             padding: 5px;
         }
+
+        .warn {
+            border: 1px solid red;
+            box-shadow: red 0px 0px 3px 1px;
+        }
     </style>
 </head>
 
@@ -31,9 +38,9 @@
     <table class="book_table" border="1" cellpadding="10">
         <tr>
             <td>
-                <label class="td_label">用户名</label>
+                <label class="td_label">用户名</label><i class="i_start">
             </td>
-            <td><input id="name" class="form-control"/></td>
+            <td><input id="name" class="form-control" onfocus="clearMsg(this);" onblur="checkName();"/></td>
             <td>
                 <label class="td_label">性别</label>
             </td>
@@ -94,9 +101,9 @@
         </tr>
 
         <tr>
-            <td><label class="td_label">密码</label></td>
+            <td><label class="td_label">密码</label><i class="i_start"></td>
             <td colspan="3">
-                <input type="password" id="password" class="book_input03"/>
+                <input type="password" id="password" class="book_input03 form-control" onfocus="clearMsg(this);" onblur="checkPassword();"/>
             </td>
 
         </tr>
@@ -104,10 +111,11 @@
 
     </table>
     </p>
-    <p class="book_foot"><input type="button" value="保存"/><input type="button" value="重置"/><input type="button"
-                                                                                                  value="关闭"/></p>
+    <p class="book_foot"><input type="button" onclick="addUser();" value="保存"/><input type="button" value="重置"/><input
+            type="button"
+            value="关闭"/></p>
 </div>
-<script src="js/jquery/jQuery-2.2.0.min.js"></script>
+
 <script src="js/editor/js/froala_editor.min.js"></script>
 
 <script src="js/editor/js/plugins/tables.min.js"></script>
@@ -124,6 +132,91 @@
         loadDic();
         loadOrg();
     });
+
+    function addUser() {
+        var name = $('#name').val().trim();
+        var password = $('#password').val().trim();
+        var age = $('#age').val().trim();
+        var gender_value = $('#gender').val().trim();
+        var nation_value = $('#nation').val().trim();
+        var org_id = $('#org').val().trim();
+        var dept = $('#dept').val().trim();
+        var job_value = $('#job').val().trim();
+        var politics_value = $('#politics').val().trim();
+        var phone = $('#phone').val().trim();
+        var email = $('#email').val().trim();
+
+        if (checkName() & checkPassword()) {
+            $.ajax({
+                url:'/user',
+                method:"POST",
+                data:
+                    {
+                        name:name,
+                        password:password,
+                        age:age,
+                        "gender.value":gender_value,
+                        "nation.value":nation_value,
+                        "org.id":org_id,
+                        dept:dept,
+                        "job.value":job_value,
+                        "politics.value":politics_value,
+                        phone:phone,
+                        email:email
+                    },
+                success:function (r) {
+                    if(r.success) {
+                        alert('添加成功');
+                    }
+                }
+            });
+        }
+
+    }
+
+    function clearMsg(e) {
+        $(e).next().remove();
+        $(e).removeClass("warn");
+    }
+
+    function checkName() {
+        var name = $('#name').val().trim();
+        if (name.length == 0) {
+            if (!$('#name').next().is('lable')) {
+                $('#name').after('<lable style="position: absolute;left:450px;top:145px;color:red;width: 100px;height:30px;text-align: center;line-height: 30px;">' +
+                    '用户名不能为空' +
+                    '</lable>');
+                $('#name').addClass("warn");
+            }
+            return false;
+        } else {
+            var reg = /-/;
+            if(reg.test(name)) {
+                if (!$('#name').next().is('lable')) {
+                    $('#name').after('<lable style="position: absolute;left:450px;top:145px;color:red;width: 150px;height:30px;text-align: center;line-height: 30px;">' +
+                        '不能使用"-"符号' +
+                        '</lable>');
+                    $('#name').addClass("warn");
+                }
+                return false;
+            }
+        }
+        return true;
+    }
+    function checkPassword() {
+        var pwd = $('#password').val().trim();
+        if (pwd.length == 0) {
+            if (!$('#password').next().is('lable')) {
+
+                $('#password').after('<lable style="position: absolute;left:650px;top:400px;color:red;width: 100px;height:30px;text-align: center;line-height: 30px;">' +
+                    '密码不能为空' +
+                    '</lable>');
+                $('#password').addClass("warn");
+            }
+            return false;
+        }
+        return true;
+    }
 
     function loadOrg() {
         $.ajax({

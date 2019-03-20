@@ -17,11 +17,7 @@ public class UserController {
     @PostMapping
     public Result addUser(User user) {
         Result r = new Result();
-        boolean flag = userService.addUser(user);
-        if(flag == false) {
-            r.setSuccess(false);
-            r.setMsg("用户名已存在");
-        }
+        userService.addUser(user);
         return r;
     }
     @GetMapping

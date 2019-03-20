@@ -14,14 +14,23 @@ public class UserService {
     @Autowired
     private UserDao userDao;
     @Transactional
-    public boolean addUser(User user) {
-        User u = userDao.findByName(user.getName());
-        if(u != null) {
-            return false;
+    public void addUser(User user) {
+        List<User> list = userDao.findByName(user.getName());
+        if(list != null && list.size() > 0) {
+            int num = 2;
+            for(User u : list) {
+                System.out.println(u);
+                String name = u.getName();
+                int index = name.lastIndexOf("-");
+                if(index != -1) {
+                    int n = Integer.parseInt(name.substring(index + 1));
+                    if(n >= num) num = n + 1;
+                }
+            }
+            user.setName(user.getName() + "-" + num);
         }
         user.setId(UUID.randomUUID().toString());
         userDao.add(user);
-        return true;
     }
     @Transactional
     public void deleteUser(String id) {
@@ -29,10 +38,6 @@ public class UserService {
     }
     @Transactional
     public boolean updateUser(User user) {
-        User u = userDao.findByName(user.getName());
-        if(u != null && !u.getId().equals(user.getId())) {
-            return false;
-        }
         userDao.update(user);
         return true;
     }

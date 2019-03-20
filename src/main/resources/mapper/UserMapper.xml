@@ -6,14 +6,14 @@
 		u_name AS name,
 		u_password AS password,
 		u_age AS age,
-		u_gender AS gender.value,
-		u_nation AS nation.value,
-		u_org AS org.id,
 		u_dept AS dept,
-		u_job AS job.value,
-		u_politics AS politics.value,
 		u_phone AS phone,
-		u_email AS email
+		u_email AS email,
+		u_gender AS "gender.value",
+		u_nation AS "nation.value",
+		org_id AS "org.id",
+		u_job AS "job.value",
+		u_politics AS "politics.value"
 	</sql>
     <insert id="add" parameterType="User">
 		insert into user values(#{id},#{name},#{password},#{age},#{gender.value},
@@ -24,13 +24,13 @@
 	</delete>
     <update id="update">
 		update user
-		  set u_name=#{name},u_password=#{password},u_age=#{age},u_gender=#{gender.value},u_nation=#{nation.value},u_org=#{org.id},u_dept=#{dept},u_job=#{job.value},u_plitics=#{politics.value},u_phone=#{phone},u_email=#{email}
+		  set u_password=#{password},u_age=#{age},u_gender=#{gender.value},u_nation=#{nation.value},u_org=#{org.id},u_dept=#{dept},u_job=#{job.value},u_plitics=#{politics.value},u_phone=#{phone},u_email=#{email}
 		where u_id=#{id}
 	</update>
     <select id="findByName" resultType="User">
         select
         <include refid="clo"/>
-        from user where u_name=#{name}
+        from user where u_name like concat(#{name}, '%')
     </select>
 	<select id="findAll" resultType="User">
 		select
