@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.oracle.hrb.zhzw.dao.UserDao">
+    <sql id="clo">
+		u_id AS id,
+		u_name AS name,
+		u_password AS password,
+		u_age AS age,
+		u_gender AS gender.value,
+		u_nation AS nation.value,
+		u_org AS org.id,
+		u_dept AS dept,
+		u_job AS job.value,
+		u_politics AS politics.value,
+		u_phone AS phone,
+		u_email AS email
+	</sql>
+    <insert id="add" parameterType="User">
+		insert into user values(#{id},#{name},#{password},#{age},#{gender.value},
+		#{nation.value},#{org.id},#{dept},#{job.value},#{politics.value},#{phone},#{email})
+	</insert>
+    <delete id="delete">
+		delete from user where u_id=#{id}
+	</delete>
+    <update id="update">
+		update user
+		  set u_name=#{name},u_password=#{password},u_age=#{age},u_gender=#{gender.value},u_nation=#{nation.value},u_org=#{org.id},u_dept=#{dept},u_job=#{job.value},u_plitics=#{politics.value},u_phone=#{phone},u_email=#{email}
+		where u_id=#{id}
+	</update>
+    <select id="findByName" resultType="User">
+        select
+        <include refid="clo"/>
+        from user where u_name=#{name}
+    </select>
+	<select id="findAll" resultType="User">
+		select
+		<include refid="clo"/>
+		from user where 1==1
+	</select>
+</mapper>

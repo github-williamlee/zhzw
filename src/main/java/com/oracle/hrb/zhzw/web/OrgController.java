@@ -43,7 +43,6 @@ public class OrgController {
 
     @RequestMapping(method = GET)
     public Result findAll(String keyword, Integer pageNum, Integer pageSize) {
-        System.out.println("keyword = " + keyword);
         Result r = new Result();
         if(pageNum == null || pageNum < 1) {
             pageNum = 1;
@@ -52,13 +51,18 @@ public class OrgController {
             pageSize = 10;
         }
         PageHelper.startPage(pageNum,pageSize);
-        if(keyword.length() == 0) {
+        PageInfo<Org> orgs = new PageInfo<>(findAll(keyword));
+        r.setData(orgs);
+        return r;
+    }
+
+    @RequestMapping(method = GET, path = "/findAll")
+    public List<Org> findAll(String keyword) {
+        if(keyword != null && keyword.length() == 0) {
             keyword = null;
         }
         List<Org> list = orgService.findAll(keyword);
-        PageInfo<Org> orgs = new PageInfo<>(list);
-        r.setData(orgs);
-        return r;
+        return list;
     }
     @RequestMapping(method = DELETE)
     public Result deleteOrg(@RequestParam("id") String id) {

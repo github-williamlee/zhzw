@@ -90,7 +90,15 @@
                 success: function (result) {
                     if (result.success) {
                         alert('添加成功');
-                        location.href = "orgList.html";
+                        //console.log(window.parent.$('.tabCloseCurrent').html());
+                        /*
+                            window.parent跨iframe访问父页面，模拟点击
+                         */
+                        window.parent.$('#sidebar-menu a:contains("组织机构列表")').click(function () {
+                            window.parent.$('.tabReload').trigger('click');
+                        });
+                        window.parent.$('#sidebar-menu a:contains("组织机构列表")').trigger('click');
+                        //window.parent.$('tabReload').trigger('click');
                     } else {
                         alert(result.msg);
                     }
