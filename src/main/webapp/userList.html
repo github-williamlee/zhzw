@@ -2,7 +2,7 @@
 
 <head>
     <meta http-equiv="Content-Type" content="text/html" ; charset="utf-8"/>
-    <title>下载中心</title>
+    <title>人员列表</title>
 
     <link href="css/all.css" rel="stylesheet" type="text/css">
     <link href="js/bstable/css/bootstrap.min.css" rel="stylesheet" type="text/css">
@@ -86,10 +86,12 @@
     <thead>
     <tr>
         <td class="cb"><input type="checkbox"></td>
-        <td>编号</td>
-        <td>名称</td>
-        <td>法人</td>
-        <td>电话</td>
+        <td>用户名</td>
+        <td>年龄</td>
+        <td>性别</td>
+        <td>工作单位</td>
+        <td>部门</td>
+        <td>联系电话</td>
         <td>操作</td>
     </tr>
     </thead>
@@ -98,7 +100,7 @@
     </tbody>
     <tfoot>
     <tr>
-        <td colspan="6">
+        <td colspan="8">
             <ul class="foot_pagination">
             </ul>
         </td>
@@ -142,14 +144,14 @@
     }
 </script>
 <script>
-    function deleteOrg(e) {
-        var id = $(e).parent().parent().data('org').id;
+    function deleteUser(e) {
+        var id = $(e).parent().parent().data('user').id;
         $.ajax({
-            url:'org?id=' + id,
+            url:'user?id=' + id,
             method:"DELETE",
             success:function (r) {
                 if(r.success) {
-                    loadOrg(window.pageNum,window.pageSize);
+                    loadUser(window.pageNum,window.pageSize);
                     setTrBg();
                 }
             }
@@ -164,15 +166,15 @@
             currentPage: window.pageNum,
             totalPages:window.pages,
             onPageClicked: function (event,originalEvent,type,page) {
-                loadOrg(page,window.pageSize);
+                loadUser(page,window.pageSize);
             }
         }
         element.bootstrapPaginator(options);
     }
     var pageNum = 1;
     var pages = 1;
-    var pageSize = 10;
-    function loadOrg(pageNum,pageSize) {
+    var pageSize = 2;
+    function loadUser(pageNum,pageSize) {
         if(pageNum == undefined) {
             pageNum = window.pageNum;
         }
@@ -181,10 +183,11 @@
         }
         var keyword = $('#keyword').val().trim();
         var url = 'org?pageNum='+pageNum+'&pageSize=' + pageSize+'&keyword=' + keyword;
-
+        url = 'user/page';
         $.ajax({
             url:url,
             method:'GET',
+            data:{pageNum:pageNum,pageSize:pageSize,name:"黄飞鸿"},
             success:function (r) {
                 window.pageNum = r.data.pageNum;
                 window.pages = r.data.pages;
@@ -196,28 +199,29 @@
                 $(r.data.list).each(function () {
                     $('tbody').append('<tr>\n' +
                         '        <td class="cb"><input type="checkbox"></td>\n' +
-                        '        <td>'+this.code+'</td>\n' +
                         '        <td>'+this.name+'</td>\n' +
-                        '        <td>'+this.legal+'</td>\n' +
+                        '        <td>'+this.age+'</td>\n' +
+                        '        <td>'+this.gender.name+'</td>\n' +
+                        '        <td>'+this.org.name+'</td>\n' +
+                        '        <td>'+this.dept+'</td>\n' +
                         '        <td>'+this.phone+'</td>\n' +
                         '        <td class="last">\n' +
-                        '            <a onclick="updateOrg(this);">修改</a>&nbsp;&nbsp;\n' +
-                        '            <a onclick="deleteOrg(this);">删除</a>\n' +
+                        '            <a onclick="updateUser(this);">修改</a>&nbsp;&nbsp;\n' +
+                        '            <a onclick="deleteUser(this);">删除</a>\n' +
                         '        </td>\n' +
                         '    </tr>');
-                    $('tbody tr:last').data('org',this);
+                    $('tbody tr:last').data('user',this);
                 });
                 setTrBg();
                 loadPage();
             }
         });
     };
-    function updateOrg(e) {
-        var org = $(e).parent().parent().data('org');
-        //alert(org.name);
+    function updateUser(e) {
+        var user = $(e).parent().parent().data('user');
         // 将js对象转换成JSON字符串存储
-        localStorage.setItem("org", JSON.stringify(org));
-        location.href = "updateOrg.html";
+        localStorage.setItem("user", JSON.stringify(user));
+        location.href = "updateUser.html";
     }
     $(function () {
         $(".find_span").click(function () {
@@ -256,7 +260,7 @@
                 $('#table > thead input').prop("checked", false);
             }
         });
-        loadOrg(pageNum, pageSize);
+        loadUser(pageNum, pageSize);
     })
 </script>
 

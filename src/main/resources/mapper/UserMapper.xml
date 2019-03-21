@@ -24,7 +24,7 @@
 	</delete>
     <update id="update">
 		update user
-		  set u_password=#{password},u_age=#{age},u_gender=#{gender.value},u_nation=#{nation.value},u_org=#{org.id},u_dept=#{dept},u_job=#{job.value},u_plitics=#{politics.value},u_phone=#{phone},u_email=#{email}
+		  set u_password=#{password},u_age=#{age},u_gender=#{gender.value},u_nation=#{nation.value},org_id=#{org.id},u_dept=#{dept},u_job=#{job.value},u_politics=#{politics.value},u_phone=#{phone},u_email=#{email}
 		where u_id=#{id}
 	</update>
     <select id="findByName" resultType="User">
@@ -35,6 +35,6 @@
 	<select id="findAll" resultType="User">
 		select
 		<include refid="clo"/>
-		from user where 1==1
+		from user where 1=1
 	</select>
 </mapper>

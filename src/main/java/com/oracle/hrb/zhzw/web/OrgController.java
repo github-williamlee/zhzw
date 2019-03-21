@@ -47,7 +47,7 @@ public class OrgController {
         if(pageNum == null || pageNum < 1) {
             pageNum = 1;
         }
-        if(pageSize == null) {
+        if(pageSize == null || pageSize < 1) {
             pageSize = 10;
         }
         PageHelper.startPage(pageNum,pageSize);

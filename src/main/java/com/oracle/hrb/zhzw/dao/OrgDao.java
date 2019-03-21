@@ -10,4 +10,5 @@ public interface OrgDao {
     void update(Org org);
     List<Org> findAll(String keyword);
     List<Org> findByCodeOrName(Org org);
+    Org findById(String id);
 }

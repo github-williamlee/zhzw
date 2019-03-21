@@ -18,6 +18,12 @@
     <update id="update">
 		update org set org_code = #{code}, org_name = #{name}, org_address=#{address}, org_legal=#{legal},org_phone=#{phone} where org_id = #{id}
 	</update>
+    <select id="findById" resultType="Org">
+        select
+        <include refid="clo"/>
+        from org
+        where org_id = #{id}
+    </select>
     <select id="findAll" resultType="Org">
         select
         <include refid="clo"/>

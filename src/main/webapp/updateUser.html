@@ -39,10 +39,7 @@
             <td>
                 <label class="td_label">用户名</label><i class="i_start">
             </td>
-            <td><input data-container="body" data-toggle="popover"
-                       data-placement="left" data-trigger="manual"
-                       data-content="不能为空"
-                       id="name" class="form-control" onfocus="clearMsg(this);" onblur="checkName();"/></td>
+            <td class="reead" id="name">
             <td>
                 <label class="td_label">性别</label>
             </td>
@@ -108,7 +105,7 @@
                 <input data-container="body" data-toggle="popover"
                        data-placement="left" data-trigger="manual"
                        data-content="不能为空"
-                       type="password" id="password" class="book_input03 form-control" onfocus="clearMsg(this);"
+                       type="text" id="password" class="book_input03 form-control" onfocus="clearMsg(this);"
                        onblur="checkPassword();"/>
             </td>
 
@@ -117,9 +114,8 @@
 
     </table>
     </p>
-    <p class="book_foot"><input type="button" onclick="addUser();" value="保存"/><input type="button" onclick="resetForm();" value="重置"/><input
-            type="button"
-            value="关闭"/></p>
+    <p class="book_foot"><input type="button" onclick="updateUser();" value="保存"/>
+        <input type="button" value="关闭" onclick="location.href='userList.html'"/></p>
 </div>
 
 <script src="js/editor/js/froala_editor.min.js"></script>
@@ -133,14 +129,29 @@
 <script src="js/editor/js/plugins/block_styles.min.js"></script>
 <script src="js/editor/js/plugins/video.min.js"></script>
 <script>
+    var user;
+    var id;
     $(function () {
         $('#editor').editable({inlineMode: false, alwaysBlank: true});
+
+        user = localStorage.getItem("user");
+        localStorage.removeItem("user");
+        // 将存储的JSON字符串转换成js对象
+        user = JSON.parse(user);
+        id = user.id;
+        // 加载数据
+        $('#name').html(user.name);
+        $('#age').val(user.age);
+        $('#password').val(user.password);
+        $('#dept').val(user.dept);
+        $('#phone').val(user.phone);
+        $('#email').val(user.email);
+
         loadDic();
         loadOrg();
     });
 
-    function addUser() {
-        var name = $('#name').val().trim();
+    function updateUser() {
         var password = $('#password').val().trim();
         var age = $('#age').val().trim();
         var gender_value = $('#gender').val().trim();
@@ -152,13 +163,13 @@
         var phone = $('#phone').val().trim();
         var email = $('#email').val().trim();
 
-        if (checkName() & checkPassword()) {
+        if (checkPassword()) {
             $.ajax({
                 url: '/user',
-                method: "POST",
+                method: "PUT",
                 data:
                     {
-                        name: name,
+                        id: id,
                         password: password,
                         age: age,
                         "gender.value": gender_value,
@@ -172,12 +183,8 @@
                     },
                 success: function (r) {
                     if (r.success) {
-                        alert('添加成功');
-                        resetForm();
-                        window.parent.$('#sidebar-menu a:contains("人员列表")').click(function () {
-                            window.parent.$('.tabReload').trigger('click');
-                        });
-                        window.parent.$('#sidebar-menu a:contains("人员列表")').trigger('click');
+                        alert('修改成功');
+                        location.href = "userList.html";
                     }
                 }
             });
@@ -185,34 +192,9 @@
 
     }
 
-    function resetForm() {
-        $('table input').val('');
-        $('select').each(function () {
-            $(this).children().first().prop("selected", true);
-        });
-    }
     function clearMsg(e) {
         $(e).removeClass("warn");
         $(e).popover('hide');
-    }
-
-    function checkName() {
-        var name = $('#name').val().trim();
-        if (name.length == 0) {
-            $('#name').addClass("warn");
-            $('#name').attr("data-content", "用户名不能为空");
-            $('#name').popover('show');
-            return false;
-        } else {
-            var reg = /-/;
-            if (reg.test(name)) {
-                $('#name').addClass("warn");
-                $('#name').attr("data-content", '用户名中不能包含"-"字符');
-                $('#name').popover('show');
-                return false;
-            }
-        }
-        return true;
     }
 
     function checkPassword() {
@@ -232,7 +214,7 @@
             method: "GET",
             success: function (r) {
                 $(r).each(function () {
-                    $('#org').append('<option value="' + this.id + '">' + this.name + '</option>');
+                    $('#org').append('<option value="' + this.id + '" ' + (user.org.id == this.id ? 'selected' : '') + '>' + this.name + '</option>');
                 });
             }
         });
@@ -251,19 +233,19 @@
                     var map = r.data;
                     $('#gender').html("");
                     $(map["性别"]).each(function () {
-                        $('#gender').append('<option value="' + this.value + '">' + this.name + '</option>');
+                        $('#gender').append('<option value="' + this.value + '" ' + (user.gender.value == this.value ? 'selected' : '') + '>' + this.name + '</option>');
                     });
                     $('#job').html("");
                     $(map["职务"]).each(function () {
-                        $('#job').append('<option value="' + this.value + '">' + this.name + '</option>');
+                        $('#job').append('<option value="' + this.value + '" ' + (user.job.value == this.value ? 'selected' : '') + '>' + this.name + '</option>');
                     });
                     $('#nation').html("");
                     $(map["民族"]).each(function () {
-                        $('#nation').append('<option value="' + this.value + '">' + this.name + '</option>');
+                        $('#nation').append('<option value="' + this.value + '" ' + (user.nation.value == this.value ? 'selected' : '') + '>' + this.name + '</option>');
                     });
                     $('#politics').html("");
                     $(map["政治面貌"]).each(function () {
-                        $('#politics').append('<option value="' + this.value + '">' + this.name + '</option>');
+                        $('#politics').append('<option value="' + this.value + '" ' + (user.politics.value == this.value ? 'selected' : '') + '>' + this.name + '</option>');
                     });
                 }
             }
