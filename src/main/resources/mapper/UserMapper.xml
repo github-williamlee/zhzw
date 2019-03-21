@@ -2,18 +2,38 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.oracle.hrb.zhzw.dao.UserDao">
     <sql id="clo">
-		u_id AS id,
-		u_name AS name,
-		u_password AS password,
-		u_age AS age,
-		u_dept AS dept,
-		u_phone AS phone,
-		u_email AS email,
-		u_gender AS "gender.value",
-		u_nation AS "nation.value",
-		org_id AS "org.id",
-		u_job AS "job.value",
-		u_politics AS "politics.value"
+		u.u_id AS id,
+		u.u_name AS name,
+		u.u_password AS password,
+		u.u_age AS age,
+		u.u_dept AS dept,
+		u.u_phone AS phone,
+		u.u_email AS email,
+		u.u_gender AS "gender.value",
+		d1.d_type AS "gender.type",
+		d1.d_name AS "gender.name",
+		u.u_nation AS "nation.value",
+		d2.d_type AS "nation.type",
+		d2.d_name AS "nation.name",
+		u.u_job AS "job.value",
+		d3.d_type AS "job.type",
+		d3.d_name AS "job.name",
+		u.u_politics AS "politics.value",
+		d4.d_type AS "politics.type",
+		d4.d_name AS "politics.name",
+		u.org_id AS "org.id",
+		o.org_name AS "org.name",
+		o.org_code AS "org.code",
+		o.org_address AS "org.address",
+		o.org_legal AS "org.legal",
+		o.org_phone AS "org.phone"
+	</sql>
+	<sql id="join">
+		join dic d1 on d1.d_type = '性别' and d1.d_value = u.u_gender
+		join dic d2 on d2.d_type = '民族' and d2.d_value = u.u_nation
+		join dic d3 on d3.d_type = '职务' and d3.d_value = u.u_job
+		join dic d4 on d4.d_type = '政治面貌' and d4.d_value = u.u_politics
+		join org o on o.org_id = u.org_id
 	</sql>
     <insert id="add" parameterType="User">
 		insert into user values(#{id},#{name},#{password},#{age},#{gender.value},
@@ -35,6 +55,8 @@
 	<select id="findAll" resultType="User">
 		select
 		<include refid="clo"/>
-		from user where 1=1
+		from user u
+		<include refid="join"/>
+		where 1=1
 	</select>
 </mapper>

@@ -49,22 +49,42 @@ public class UserService {
         userDao.update(user);
         return true;
     }
+
+    /**
+     * 查询方式实现多对一
+     */
     @Transactional
-    public List<User> findAllUser(User user) {
+    public List<User> findAllUser2(User user) {
         List<User> users = userDao.findAll(user);
         List<Dic> genders = dicDao.findByType("性别");
+        List<Dic> nations = dicDao.findByType("民族");
+        List<Dic> politics = dicDao.findByType("政治面貌");
         for(User u : users) {
             Org org = orgDao.findById(u.getOrg().getId());
             u.setOrg(org);
-            Dic gender = null;
-            for(Dic dic : genders) {
-                if(dic.getValue() == u.getGender().getValue()) {
-                    gender = dic;
-                }
-            }
-            u.setGender(gender);
+            u.setGender(getDic(genders, u.getGender().getValue()));
+            u.setNation(getDic(nations, u.getNation().getValue()));
+            u.setPolitics(getDic(politics, u.getPolitics().getValue()));
         }
         return users;
+    }
+    /**
+     * 表连接方式实现多对一
+     */
+    @Transactional
+    public List<User> findAllUser(User user) {
+        List<User> users = userDao.findAll(user);
+        return users;
+    }
+
+    private Dic getDic(List<Dic> list, int value) {
+        Dic dic = null;
+        for(Dic d : list) {
+            if(d.getValue() == value) {
+                dic = d;
+            }
+        }
+        return dic;
     }
 
 }
