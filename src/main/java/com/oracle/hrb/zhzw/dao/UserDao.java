@@ -10,4 +10,5 @@ public interface UserDao {
     void update(User user);
     List<User> findAll(User user);
     List<User> findByName(String name);
+    User findByNameAndPassword(User user);
 }

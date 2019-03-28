@@ -1,13 +1,17 @@
-﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>个人信息维护</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>个人信息维护</title>
 
 
     <link href="css/all.css" rel="stylesheet" type="text/css">
     <link href="js/editor/css/font-awesome.min.css" rel="stylesheet" type="text/css">
     <link href="js/editor/css/froala_editor.min.css" rel="stylesheet" type="text/css">
+    <script src="js/jquery/jQuery-2.2.0.min.js"></script>
+    <link rel="stylesheet" href="js/bootstrap/css/bootstrap.min.css">
+    <script src="js/bootstrap/js/bootstrap.min.js"></script>
 </head>
 
 <body style="background-color: #e6ecf5">
@@ -15,82 +19,77 @@
 
     <h1 class="book_h01">个人详情</h1>
     <p class="book_p">
-        <table class="book_table" border="1" cellpadding="10">
-    <tr>
-        <td>
-        <label class="td_label">用户名</label>
-    </td>
-        <td class="reead" >周加林</td>
-        <td>
-            <label class="td_label">性别</label>
-        </td>
-        <td  class="reead">男</td>
+    <table class="book_table" border="1" cellpadding="10">
+        <tr>
+            <td>
+                <label class="td_label">用户名</label>
+            </td>
+            <td class="reead" id="name">周加林</td>
+            <td>
+                <label class="td_label">性别</label>
+            </td>
+            <td>
+                <select class="form-control" id="gender"></select>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label class="td_label" >年龄</label>
+            </td>
+            <td><input type="text" class="book_input03" id="age"/></td>
+            <td>
+                <label class="td_label">民族</label>
+            </td>
+            <td>
+                <select class="form-control" id="nation"></select>
+            </td>
+        </tr>
+        <tr>
+            <td><label class="td_label">工作单位</label></td>
+            <td><select class="form-control" id="org"></select></td>
+            <td><label class="td_label">部门</label></td>
+            <td>
+                <input type="text" class="book_input03" id="dept"/>
+            </td>
 
+        </tr>
+        <tr>
+            <td><label class="td_label">职位</label></td>
+            <td id="job" class="reead"></td>
 
-    </tr>
-    <tr><td>
-        <label class="td_label">年龄</label>
-    </td>
-        <td  class="reead">45</td>
-        <td>
-            <label class="td_label">民族</label>
-        </td>
-        <td  class="reead">汉</td>
+            <td><label class="td_label">政治面貌</label></td>
+            <td>
+                <select class="form-control" id="politics">
+                    <option>党员</option>
+                    <option>团员</option>
+                    <option>其它</option>
+                </select>
+            </td>
 
-    </tr>
-    <tr><td><label class="td_label">工作单位</label></td>
-        <td ><input type="text" class="book_input03" /></td>
-
-        <td><label class="td_label">部门</label></td>
-        <td >
-            <input type="text" class="book_input03" />
-        </td>
-
-    </tr>
-    <tr><td><label class="td_label">职位</label></td>
-        <td ><select>
-            <option>管理员</option>
-            <option>后勤</option>
-            <option>其它</option>
-        </select></td>
-
-        <td><label class="td_label">政治面貌</label></td>
-        <td>
-            <select>
-                <option>党员</option>
-                <option>团员</option>
-                <option>其它</option>
-            </select>
-        </td>
-
-    </tr>
-    <tr> <td><label class="td_label">联系电话</label></td>
-        <td >
-            <input type="text" class="book_input03" />
-        </td>
-        <td><label class="td_label">邮箱</label></td>
-        <td >
-            <input type="text" class="book_input03" />
-        </td>
-
-
-    </tr>
-
-    <tr>
-        <td><label class="td_label">密码</label></td>
-        <td colspan="3">
-            <input type="text" class="book_input03" />
-    </td>
-
-    </tr>
-
-
-
-</table>
+        </tr>
+        <tr>
+            <td><label class="td_label">联系电话</label></td>
+            <td>
+                <input type="text" class="book_input03" id="phone"/>
+            </td>
+            <td><label class="td_label">邮箱</label></td>
+            <td>
+                <input type="text" class="book_input03" id="email"/>
+            </td>
+        </tr>
+        <tr>
+            <td><label class="td_label">密码</label></td>
+            <td colspan="3">
+                <input type="text" class="book_input03" id="password" data-container="body" data-toggle="popover"
+                       data-placement="left" data-trigger="manual"
+                       onblur="checkPassword();" onfocus="clearMsg(this);"/>
+            </td>
+        </tr>
+    </table>
     </p>
-    <p class="book_foot"><input type="button" value="保存"/><input type="button" value="重置"/><input type="button" value="关闭"/></p>
+    <p class="book_foot"><input type="button" value="保存" onclick="updateUser();"/></p>
 </div>
-<script  src="js/jquery/jQuery-2.2.0.min.js"></script>
+
 <script src="js/editor/js/froala_editor.min.js"></script>
 
 <script src="js/editor/js/plugins/tables.min.js"></script>
@@ -102,9 +101,131 @@
 <script src="js/editor/js/plugins/block_styles.min.js"></script>
 <script src="js/editor/js/plugins/video.min.js"></script>
 <script>
-    $(function(){
-        $('#editor').editable({inlineMode: false, alwaysBlank: true})
+    $(function () {
+        $('#editor').editable({inlineMode: false, alwaysBlank: true});
+        getUser();
+        loadDic();
+        loadOrg();
     });
+    var user;
+
+    function getUser() {
+        $.ajax({
+            url: "/user/getUser",
+            method: "GET",
+            success: function (r) {
+                if (r.success) {
+                    user = r.data;
+                    console.log(user.name);
+                    $('#name').html(user.name);
+                    $('#password').val(user.password);
+                    $('#age').val(user.age);
+                    $('#dept').val(user.dept);
+                    $('#phone').val(user.phone);
+                    $('#email').val(user.email);
+                }
+            }
+        });
+    }
+    function updateUser() {
+        var password = $('#password').val().trim();
+        var age = $('#age').val().trim();
+        var gender_value = $('#gender').val().trim();
+        var nation_value = $('#nation').val().trim();
+        var org_id = $('#org').val().trim();
+        var dept = $('#dept').val().trim();
+        var politics_value = $('#politics').val().trim();
+        var phone = $('#phone').val().trim();
+        var email = $('#email').val().trim();
+
+        if (checkPassword()) {
+            $.ajax({
+                url: '/user',
+                method: "PUT",
+                data:
+                    {
+                        id: user.id,
+                        password: password,
+                        age: age,
+                        "gender.value": gender_value,
+                        "nation.value": nation_value,
+                        "org.id": org_id,
+                        dept: dept,
+                        "job.value": user.job.value,
+                        "politics.value": politics_value,
+                        phone: phone,
+                        email: email
+                    },
+                success: function (r) {
+                    if (r.success) {
+                        alert('修改成功');
+                    }
+                }
+            });
+        }
+
+    }
+
+    function clearMsg(e) {
+        $(e).removeClass("warn");
+        $(e).popover('hide');
+    }
+
+    function checkPassword() {
+        var pwd = $('#password').val().trim();
+        if (pwd.length == 0) {
+            $('#password').addClass("warn");
+            $('#password').attr("data-content", '密码不能为空');
+            $('#password').popover('show');
+            return false;
+        }
+        return true;
+    }
+    function loadOrg() {
+        $.ajax({
+            url: '/org/findAll',
+            method: "GET",
+            success: function (r) {
+                $(r).each(function () {
+                    $('#org').append('<option value="' + this.id + '" ' + (user.org.id == this.id ? 'selected' : '') + '>' + this.name + '</option>');
+                });
+            }
+        });
+    }
+
+    function loadDic() {
+        var data = ["性别", "职务", "民族", "政治面貌"];
+        $.ajax({
+            url: '/dic',
+            method: "POST",
+            dataType: "json",
+            contentType: "application/json",
+            data: JSON.stringify(data),
+            success: function (r) {
+                if (r.success) {
+                    var map = r.data;
+                    $('#gender').html("");
+                    $(map["性别"]).each(function () {
+                        $('#gender').append('<option value="' + this.value + '" ' + (user.gender.value == this.value ? 'selected' : '') + '>' + this.name + '</option>');
+                    });
+                    $('#job').html("");
+                    $(map["职务"]).each(function () {
+                        if(this.value == user.job.value) {
+                            $('#job').html(this.name);
+                        }
+                    });
+                    $('#nation').html("");
+                    $(map["民族"]).each(function () {
+                        $('#nation').append('<option value="' + this.value + '" ' + (user.nation.value == this.value ? 'selected' : '') + '>' + this.name + '</option>');
+                    });
+                    $('#politics').html("");
+                    $(map["政治面貌"]).each(function () {
+                        $('#politics').append('<option value="' + this.value + '" ' + (user.politics.value == this.value ? 'selected' : '') + '>' + this.name + '</option>');
+                    });
+                }
+            }
+        });
+    }
 </script>
 </body>
 </html>

@@ -4,9 +4,14 @@ public class Result {
     private boolean success;
     private String msg;
     private Object data;
+    private int maxInactive;
 
     public Result() {
         this.success = true;
+    }
+    public Result(int maxInactive) {
+        this.success = true;
+        this.maxInactive = maxInactive;
     }
 
     public boolean isSuccess() {
@@ -31,5 +36,13 @@ public class Result {
 
     public void setData(Object data) {
         this.data = data;
+    }
+
+    public int getMaxInactive() {
+        return maxInactive;
+    }
+
+    public void setMaxInactive(int maxInactive) {
+        this.maxInactive = maxInactive;
     }
 }

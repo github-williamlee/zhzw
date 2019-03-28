@@ -54,10 +54,12 @@
         #table > tfoot td {
             align-items: center;
         }
-        .last{
+
+        .last {
             width: 120px;
         }
-        .last a:hover{
+
+        .last a:hover {
             cursor: pointer;
         }
     </style>
@@ -66,14 +68,22 @@
 <body>
 
 <div class="div_find">
-
-    <p>
-        <label class="find_labela">关键字：</label>
-        <input type="text" class="find_input" id="keyword">
-        <button class="find_but" onclick="loadOrg();">搜索一下</button>
-    </p>
-
+    <form>
+        <p>
+            <label class="find_labela">用户名：</label><input type="text" class="find_input" id="name">
+            <label class="find_labela">年龄：</label><input type="text" class="find_input" id="age">
+        </p>
+        <p>
+            <label class="find_labela">性别：</label>
+            <select class="find_input" id="gender"></select>
+            <label class="find_labela">工作单位：</label>
+            <select class="find_input" id="org"></select>
+            <input type="button" value="搜索一下" class="find_but" id="but_close" onclick="searchUser();">
+            <input type="reset" value="重置" class="find_but" id="but_close01">
+        </p>
+    </form>
 </div>
+
 <p class="p_but">
 
 
@@ -120,6 +130,52 @@
 
 <script src="js/layer_v2.1/layer/layer.js"></script>
 <script>
+    function searchUser() {
+        var name = $('#name').val().trim();
+        var age = $('#age').val().trim();
+        var gender = $('#gender').val().trim();
+        var org_id = $('#org').val().trim();
+        //alert(name + ", " + age + ", " + gender + ", " + org_id);
+        var user = new Object();
+        user.name = name;
+        user.age = age;
+        user.gender = gender == -1 ? null : gender;
+        user.orgId = org_id == -1 ? null : org_id;
+        loadUser(1, 10, user);
+    }
+
+    function loadGender() {
+        var data = ["性别"];
+        $.ajax({
+            url: '/dic',
+            method: "POST",
+            dataType: "json",
+            contentType: "application/json",
+            data: JSON.stringify(data),
+            success: function (r) {
+                if (r.success) {
+                    var map = r.data;
+                    $('#gender').html('<option value="-1">所有</option>');
+                    $(map["性别"]).each(function () {
+                        $('#gender').append('<option value="' + this.value + '">' + this.name + '</option>');
+                    });
+                }
+            }
+        });
+    }
+
+    function loadOrg() {
+        $.ajax({
+            url: '/org/findAll',
+            method: "GET",
+            success: function (r) {
+                $('#org').html('<option value="-1">所有</option>');
+                $(r).each(function () {
+                    $('#org').append('<option value="' + this.id + '">' + this.name + '</option>');
+                });
+            }
+        });
+    }
 
     function setTrBg() {
         $('#table > tbody > tr').removeClass();
@@ -147,51 +203,69 @@
     function deleteUser(e) {
         var id = $(e).parent().parent().data('user').id;
         $.ajax({
-            url:'user?id=' + id,
-            method:"DELETE",
-            success:function (r) {
-                if(r.success) {
-                    loadUser(window.pageNum,window.pageSize);
+            url: 'user?id=' + id,
+            method: "DELETE",
+            success: function (r) {
+                if (r.success) {
+                    loadUser(window.pageNum, window.pageSize);
                     setTrBg();
                 }
             }
         });
     }
+
     // 分页数据加载
     function loadPage() {
         console.log("pages = " + window.pages);
         var element = $('.foot_pagination');
         var options = {
-            bootstrapMajorVersion:3,
+            bootstrapMajorVersion: 3,
             currentPage: window.pageNum,
-            totalPages:window.pages,
-            onPageClicked: function (event,originalEvent,type,page) {
-                loadUser(page,window.pageSize);
+            totalPages: window.pages,
+            onPageClicked: function (event, originalEvent, type, page) {
+                loadUser(page, window.pageSize);
             }
         }
         element.bootstrapPaginator(options);
     }
+
     var pageNum = 1;
     var pages = 1;
-    var pageSize = 2;
-    function loadUser(pageNum,pageSize) {
-        if(pageNum == undefined) {
+    var pageSize = 10;
+
+    function loadUser(pageNum, pageSize, user) {
+        if (pageNum == undefined) {
             pageNum = window.pageNum;
         }
-        if(pageSize == undefined) {
+        if (pageSize == undefined) {
             pageSize = window.pageSize;
         }
-        var keyword = $('#keyword').val().trim();
-        var url = 'org?pageNum='+pageNum+'&pageSize=' + pageSize+'&keyword=' + keyword;
-        url = 'user/page';
+        var url = 'user/page';
+        var data;
+        if(user == undefined) {
+            data = {
+                pageNum: pageNum,
+                pageSize: pageSize
+            };
+        } else {
+            data = {
+                pageNum: pageNum,
+                pageSize: pageSize,
+                name:user.name,
+                age:user.age,
+                "gender.value":user.gender,
+                "org.id":user.orgId
+            };
+        }
+
         $.ajax({
-            url:url,
-            method:'GET',
-            data:{pageNum:pageNum,pageSize:pageSize,name:"黄飞鸿"},
-            success:function (r) {
+            url: url,
+            method: 'GET',
+            data: data,
+            success: function (r) {
                 window.pageNum = r.data.pageNum;
                 window.pages = r.data.pages;
-                if(r.data.size == 0) {
+                if (r.data.size == 0) {
                     window.parent.$('.tabReload').trigger('click');
                     return;
                 }
@@ -199,30 +273,32 @@
                 $(r.data.list).each(function () {
                     $('tbody').append('<tr>\n' +
                         '        <td class="cb"><input type="checkbox"></td>\n' +
-                        '        <td>'+this.name+'</td>\n' +
-                        '        <td>'+this.age+'</td>\n' +
-                        '        <td>'+this.gender.name+'</td>\n' +
-                        '        <td>'+this.org.name+'</td>\n' +
-                        '        <td>'+this.dept+'</td>\n' +
-                        '        <td>'+this.phone+'</td>\n' +
+                        '        <td>' + this.name + '</td>\n' +
+                        '        <td>' + this.age + '</td>\n' +
+                        '        <td>' + this.gender.name + '</td>\n' +
+                        '        <td>' + this.org.name + '</td>\n' +
+                        '        <td>' + this.dept + '</td>\n' +
+                        '        <td>' + this.phone + '</td>\n' +
                         '        <td class="last">\n' +
                         '            <a onclick="updateUser(this);">修改</a>&nbsp;&nbsp;\n' +
                         '            <a onclick="deleteUser(this);">删除</a>\n' +
                         '        </td>\n' +
                         '    </tr>');
-                    $('tbody tr:last').data('user',this);
+                    $('tbody tr:last').data('user', this);
                 });
                 setTrBg();
                 loadPage();
             }
         });
     };
+
     function updateUser(e) {
         var user = $(e).parent().parent().data('user');
         // 将js对象转换成JSON字符串存储
         localStorage.setItem("user", JSON.stringify(user));
         location.href = "updateUser.html";
     }
+
     $(function () {
         $(".find_span").click(function () {
             $("#open").show();
@@ -261,8 +337,10 @@
             }
         });
         loadUser(pageNum, pageSize);
+        loadGender();
+        loadOrg();
     })
 </script>
-
+<script src="js/cookie.js"></script>
 </body>
 </html>

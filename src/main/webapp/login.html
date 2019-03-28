@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- 设置响应式布局 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <title>登录</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- HTML5 shim 和 Respond.js 是为了让 IE8 支持 HTML5 元素和媒体查询（media queries）功能 -->
+    <!-- 警告：通过 file:// 协议（就是直接将 html 页面拖拽到浏览器中）访问页面时 Respond.js 不起作用 -->
+    <!--[if lt IE 9]>
+    <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+    <![endif]-->
+    <style>
+        body{
+            background: url("./img/bg.JPG") no-repeat;
+            background-size: 70%;
+        }
+        #head{
+            height: 50px;
+            background-color: #3C3C3C;
+            color: white;
+            line-height: 50px;
+            font-size: 16px;
+            padding-left: 20px;
+        }
+        #form{
+            width:450px;
+            height: 400px;
+            border: 1px solid #D5D5D5;
+            position: absolute;
+            top: 150px;
+            right: 80px;
+            padding-left: 50px;
+            padding-right: 50px;
+        }
+        #remember{
+            height: 20px;
+            line-height: 20px;
+        }
+    </style>
+</head>
+<body>
+<div id="head">
+    <div>综合服务平台</div>
+</div>
+<div id="form">
+    <div class="page-header">
+        <h1>登录</h1>
+    </div>
+    <form role="form" class="form-group-lg" onsubmit="return false;">
+        <div class="form-group">
+            <input data-container="body" data-toggle="popover"
+                   data-placement="top" data-trigger="manual"
+                   type="text" class="form-control" id="name" placeholder="用户名"
+                   onfocus="clearError(this)">
+        </div>
+        <div class="form-group">
+            <input data-container="body" data-toggle="popover"
+                   data-placement="top" data-trigger="manual"
+                   type="password" class="form-control" id="password" placeholder="密码"
+                   onfocus="clearError(this)">
+        </div>
+        <div class="form-group" id="remember">
+            <div class="checkbox">
+                <label>&nbsp;&nbsp;<input type="checkbox"> 记住密码</label>
+            </div>
+        </div>
+        <div class="form-group">
+            <input type="submit" onclick="login();" class="form-control btn btn-primary" value="登录">
+        </div>
+    </form>
+</div>
+<script>
+    function clearError(e) {
+        $(e).popover('hide');
+    }
+    function login() {
+        var name = $('#name').val().trim();
+        var password = $('#password').val().trim();
+        if(name.length == 0) {
+            $('#name').attr("data-content", '用户名不能为空');
+            $('#name').popover('show');
+            return;
+        }
+        if(password.length == 0) {
+            $('#password').attr("data-content", '密码不能为空');
+            $('#password').popover('show');
+            return;
+        }
+        $.ajax({
+            url:"/user/login",
+            method:"POST",
+            data:{name:name,password:password},
+            success:function (r) {
+                if(r.success) {
+                    var user = r.data;
+                    addCookie("username", user.name, 1);
+                    addCookie("job", user.job.name, 1);
+                    location.href = "index.html";
+                } else {
+                    $('#name').attr("data-content", r.msg);
+                    $('#name').popover('show');
+                }
+            }
+        });
+    }
+</script>
+<script src="js/cookie.js"></script>
+<!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->
+<script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script>
+</body>
+</html>

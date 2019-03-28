@@ -23,6 +23,12 @@ public class UserService {
     private DicDao dicDao;
 
     @Transactional
+    public User login(User user) {
+        User u = userDao.findByNameAndPassword(user);
+        return u;
+    }
+
+    @Transactional
     public void addUser(User user) {
         List<User> list = userDao.findByName(user.getName());
         if(list != null && list.size() > 0) {

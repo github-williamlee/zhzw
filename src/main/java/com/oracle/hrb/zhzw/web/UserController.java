@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.net.URLEncoder;
 import java.util.List;
 
@@ -20,21 +21,58 @@ import java.util.List;
 public class UserController {
     @Autowired
     private UserService userService;
+
+    private static final int MAX_INACTIVE = 10 * 60;
+
+    @GetMapping("/getUser")
+    public Result getUser(HttpSession session) {
+        Result r = new Result(MAX_INACTIVE);
+        User user = (User) session.getAttribute("user");
+        if(user == null) {
+            r.setSuccess(false);
+        } else {
+            r.setData(user);
+        }
+        return r;
+    }
+
+    @PostMapping("/login")
+    public Result login(User user, HttpSession session) {
+        Result r = new Result(MAX_INACTIVE);
+        user = userService.login(user);
+        if(user == null) {
+            r.setSuccess(false);
+            r.setMsg("用户名或密码错误");
+        } else {
+            session.setMaxInactiveInterval(MAX_INACTIVE);
+            session.setAttribute("user", user);
+            r.setData(user);
+        }
+        return r;
+    }
+    @DeleteMapping("/logout")
+    public Result logout(HttpSession session) {
+        Result r = new Result();
+        session.invalidate();
+        return r;
+    }
+
     @PostMapping
     public Result addUser(User user) {
-        Result r = new Result();
+        Result r = new Result(MAX_INACTIVE);
         userService.addUser(user);
         return r;
     }
     @GetMapping
     public Result findAll(User user) {
-        Result r = new Result();
+        Result r = new Result(MAX_INACTIVE);
         r.setData(userService.findAllUser(user));
         return r;
     }
     @GetMapping(path = "/page")
     public Result findAll(User user, Integer pageNum, Integer pageSize) {
-        Result r = new Result();
+        Result r = new Result(MAX_INACTIVE);
+        System.out.println(user);
         if(pageNum == null || pageNum < 1) {
             pageNum = 1;
         }
@@ -49,14 +87,14 @@ public class UserController {
 
     @DeleteMapping
     public Result deleteUser(String id) {
-        Result r = new Result();
+        Result r = new Result(MAX_INACTIVE);
         userService.deleteUser(id);
         return r;
     }
 
     @PutMapping
     public Result updateUser(User user) {
-        Result r = new Result();
+        Result r = new Result(MAX_INACTIVE);
         userService.updateUser(user);
         return r;
     }

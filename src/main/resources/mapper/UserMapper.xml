@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.oracle.hrb.zhzw.dao.UserDao">
-    <sql id="clo">
+	<sql id="clo">
 		u.u_id AS id,
 		u.u_name AS name,
 		u.u_password AS password,
@@ -47,10 +47,19 @@
 		  set u_password=#{password},u_age=#{age},u_gender=#{gender.value},u_nation=#{nation.value},org_id=#{org.id},u_dept=#{dept},u_job=#{job.value},u_politics=#{politics.value},u_phone=#{phone},u_email=#{email}
 		where u_id=#{id}
 	</update>
+	<select id="findByNameAndPassword" resultType="User">
+		select
+		<include refid="clo"/>
+		from user u
+		<include refid="join"/>
+		where u_name = #{name} and u_password = #{password}
+	</select>
     <select id="findByName" resultType="User">
         select
         <include refid="clo"/>
-        from user where u_name like concat(#{name}, '%')
+        from user u
+		<include refid="join"/>
+		where u_name like concat(#{name}, '%')
     </select>
 	<select id="findAll" resultType="User">
 		select
@@ -58,5 +67,17 @@
 		from user u
 		<include refid="join"/>
 		where 1=1
+		<if test="name != null">
+			and u_name like concat(#{name}, '%')
+		</if>
+		<if test="age != null">
+			and u_age = #{age}
+		</if>
+		<if test="gender != null and gender.value != null">
+			and u_gender = #{gender.value}
+		</if>
+		<if test="org != null and org.id!=null and org.id.length != 0">
+			and u.org_id = #{org.id}
+		</if>
 	</select>
 </mapper>
